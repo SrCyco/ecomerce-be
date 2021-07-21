@@ -1,0 +1,21 @@
+{
+  "extends": "@tsconfig/node14/tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 14",
+
+  "compilerOptions": {
+    "lib": ["es2020"],
+    "module": "commonjs",
+    "target": "es2020",
+    "outDir": "dist",
+    "rootDir": "server",
+
+    "noImplicitAny": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["server/**/*", "server"],
+  "exclude": ["node_modules", "dist"]
+}
