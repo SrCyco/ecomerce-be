@@ -2,10 +2,15 @@ import express from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
 import { localDB } from './config/config';
+import routes from './routes';
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// routes config
+
+app.use(routes);
 
 const dbConnection = async () => {
   try {
