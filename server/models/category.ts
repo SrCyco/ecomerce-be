@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Models } from '../types/types';
 
 const Schema = mongoose.Schema;
 
@@ -19,4 +20,4 @@ const categorySchema = new Schema({
   },
 });
 
-export default mongoose.model('Category', categorySchema);
+export default mongoose.model(Models.Category, categorySchema);
