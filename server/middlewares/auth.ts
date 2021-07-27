@@ -1,14 +1,11 @@
 import jwt from 'jsonwebtoken';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
+import { User } from '../types/types';
 
-const verifyToken = (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction,
-) => {
+const verifyToken = (req: Request<User>, res: Response, next: NextFunction) => {
   const token = req.get('token') ?? '';
 
-  jwt.verify(token, '', (error, decoded) => {
+  jwt.verify(token, '', (error, decoded = { user: '' }) => {
     if (error) {
       return res.status(401).json({
         ok: false,
@@ -18,7 +15,9 @@ const verifyToken = (
       });
     }
 
-    req.user = decoded.user;
+    req.body.user = decoded.user;
     next();
   });
 };
+
+export default { verifyToken };

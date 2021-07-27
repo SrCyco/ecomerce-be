@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import { Models } from '../types/types';
+import { Models, Place } from '../types/types';
 
 const Schema = mongoose.Schema;
 
-const placeSchema = new Schema({
+const placeSchema = new Schema<Place>({
   placeId: {
     type: String,
     unique: true,
@@ -24,7 +24,7 @@ const placeSchema = new Schema({
     ref: Models.Place,
     required: true,
   },
-  directionId: {
+  addressId: {
     type: Schema.Types.ObjectId,
     ref: Models.Place,
     required: true,

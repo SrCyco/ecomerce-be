@@ -1,15 +1,19 @@
 import mongoose from 'mongoose';
-import { Models } from '../types/types';
+import { Models, User } from '../types/types';
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+const userSchema = new Schema<User>({
   userId: {
     type: Number,
     unique: true,
     required: true,
   },
-  placeId: {},
+  placeId: {
+    type: Schema.Types.ObjectId,
+    ref: Models.Place,
+    required: true,
+  },
   name: {
     type: String,
     unique: true,
@@ -19,6 +23,16 @@ const userSchema = new Schema({
     type: String,
     unique: true,
     required: true,
+  },
+  password: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  address: {
+    type: String,
+    unique: true,
+    required: false,
   },
   phone: {
     type: String,
