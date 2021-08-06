@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 export interface CategoryType {
   categoryId: number;
   name: string;
@@ -5,7 +6,7 @@ export interface CategoryType {
 }
 
 export enum Models {
-  Category = 'Categoty',
+  Category = 'Category',
   Place = 'Place',
   User = 'User',
 }
@@ -14,22 +15,21 @@ export enum PlaceType {
   Country = 'COUNTRY',
   Department = 'DEPARTMENT',
   City = 'CITY',
-  Direction = '',
 }
 
 export interface Place {
+  _id: mongoose.ObjectId;
   placeId: string;
-  countryId: string;
-  departmentId: string;
-  cityId: string;
-  addressId: string;
+  countryId?: string;
+  departmentId?: string;
+  cityId?: string;
   type: PlaceType;
-  additionalInfo?: string;
+  name: string;
 }
 
 export interface User {
   userId: string;
-  placeId: Place;
+  placeId: string;
   name: string;
   lastname: string;
   password: string;
@@ -37,6 +37,6 @@ export interface User {
   phone: string;
   email: string;
   role?: string;
-  active: boolean;
+  isActive: boolean;
   googleLogin: boolean;
 }

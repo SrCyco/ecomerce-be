@@ -49,7 +49,7 @@ const userSchema = new Schema<User>({
     unique: true,
     required: false,
   },
-  active: {
+  isActive: {
     type: Boolean,
     unique: true,
     required: true,
@@ -58,7 +58,8 @@ const userSchema = new Schema<User>({
   googleLogin: {
     type: Boolean,
     unique: true,
-    required: true,
+    required: false,
+    default: false,
   },
 });
 

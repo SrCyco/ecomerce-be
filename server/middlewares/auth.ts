@@ -1,11 +1,15 @@
 import jwt from 'jsonwebtoken';
-import express, { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { User } from '../types/types';
 
-const verifyToken = (req: Request<User>, res: Response, next: NextFunction) => {
-  const token = req.get('token') ?? '';
+export const verifyToken = (
+  req: Request<User>,
+  res: Response,
+  next: NextFunction,
+): void => {
+  const token = req.get('token') || '';
 
-  jwt.verify(token, '', (error, decoded = { user: '' }) => {
+  jwt.verify(token, 'test', (error, decoded = { user: '' }) => {
     if (error) {
       return res.status(401).json({
         ok: false,
@@ -19,5 +23,3 @@ const verifyToken = (req: Request<User>, res: Response, next: NextFunction) => {
     next();
   });
 };
-
-export default { verifyToken };

@@ -8,7 +8,8 @@ import { User as UserType } from '../types/types';
 const app = express();
 
 app.post('/login', (req, res) => {
-  const body = req.body;
+  const { email, password } = req.body;
+  console.log(email, password);
   const noMatchResponse = {
     ok: false,
     error: {
@@ -16,7 +17,7 @@ app.post('/login', (req, res) => {
     },
   };
 
-  User.findOne({ email: body.email }, (error: Error, user: UserType) => {
+  User.findOne({ email }, (error: Error, user: UserType) => {
     if (error) {
       return res.status(500).json({
         ok: false,
@@ -28,7 +29,7 @@ app.post('/login', (req, res) => {
       return res.status(400).json(noMatchResponse);
     }
 
-    if (!bcrypt.compareSync(body.password, user.password)) {
+    if (!bcrypt.compareSync(password, user.password)) {
       return res.status(400).json(noMatchResponse);
     }
 
@@ -36,7 +37,7 @@ app.post('/login', (req, res) => {
       {
         user,
       },
-      '',
+      'test',
       { expiresIn: '48h' },
     );
 
@@ -47,3 +48,5 @@ app.post('/login', (req, res) => {
     });
   });
 });
+
+export default app;

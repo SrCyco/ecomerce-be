@@ -12,29 +12,24 @@ const placeSchema = new Schema<Place>({
   countryId: {
     type: Schema.Types.ObjectId,
     ref: Models.Place,
-    required: true,
+    required: false,
   },
   departmentId: {
     type: Schema.Types.ObjectId,
     ref: Models.Place,
-    required: true,
+    required: false,
   },
   cityId: {
     type: Schema.Types.ObjectId,
     ref: Models.Place,
-    required: true,
-  },
-  addressId: {
-    type: Schema.Types.ObjectId,
-    ref: Models.Place,
-    required: true,
+    required: false,
   },
   type: {
     type: String,
     unique: true,
     required: true,
   },
-  additionalInfo: {
+  name: {
     type: String,
     unique: true,
     required: false,
