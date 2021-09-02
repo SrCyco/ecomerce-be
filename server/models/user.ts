@@ -1,14 +1,22 @@
 import mongoose from 'mongoose';
-import { Models, User } from '../types/types';
+import { Models } from '../types/types';
+
+export interface User {
+  placeId: string;
+  name: string;
+  lastname: string;
+  password: string;
+  address?: string;
+  phone: string;
+  email: string;
+  role?: string;
+  isActive: boolean;
+  googleLogin: boolean;
+}
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema<User>({
-  userId: {
-    type: Number,
-    unique: true,
-    required: true,
-  },
   placeId: {
     type: Schema.Types.ObjectId,
     ref: Models.Place,

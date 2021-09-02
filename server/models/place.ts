@@ -1,14 +1,23 @@
-import mongoose from 'mongoose';
-import { Models, Place } from '../types/types';
+import { Schema, model, Model, Document, PopulatedDoc } from 'mongoose';
+import { Models } from '../types/types';
 
-const Schema = mongoose.Schema;
+export enum PlaceType {
+  Country = 'COUNTRY',
+  Department = 'DEPARTMENT',
+  City = 'CITY',
+  Address = 'ADDRESS',
+}
 
-const placeSchema = new Schema<Place>({
-  placeId: {
-    type: String,
-    unique: true,
-    required: true,
-  },
+export interface Place {
+  countryId?: PopulatedDoc<Place & Document>;
+  departmentId?: PopulatedDoc<Place & Document>;
+  cityId?: PopulatedDoc<Place & Document>;
+  addressId?: PopulatedDoc<Place & Document>;
+  type: PlaceType;
+  description: string;
+}
+
+const placeSchema = new Schema<Place, Model<Place>, Place>({
   countryId: {
     type: Schema.Types.ObjectId,
     ref: Models.Place,
@@ -24,16 +33,21 @@ const placeSchema = new Schema<Place>({
     ref: Models.Place,
     required: false,
   },
+  addressId: {
+    type: Schema.Types.ObjectId,
+    ref: Models.Place,
+    required: false,
+  },
   type: {
     type: String,
     unique: true,
     required: true,
   },
-  name: {
+  description: {
     type: String,
     unique: true,
     required: false,
   },
 });
 
-export default mongoose.model(Models.Place, placeSchema);
+export default model(Models.Place, placeSchema);

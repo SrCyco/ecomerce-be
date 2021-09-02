@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
 import { Models } from '../types/types';
 
+export interface Category {
+  name: string;
+  description: string;
+}
+
 const Schema = mongoose.Schema;
 
-const categorySchema = new Schema({
-  categoryId: {
-    type: Number,
-    unique: true,
-    required: [true, 'The id of the category is required'],
-  },
+const categorySchema = new Schema<Category>({
   name: {
     type: String,
     unique: true,
@@ -21,4 +21,4 @@ const categorySchema = new Schema({
   },
 });
 
-export default mongoose.model(Models.Category, categorySchema);
+export default mongoose.model<Category>(Models.Category, categorySchema);
