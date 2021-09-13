@@ -1,42 +1,46 @@
-import express from 'express';
-import Category from '../models/category';
+import express, { Request } from 'express';
 
 // Types
-import { CategoryType } from '../types/types';
-import mongoose from 'mongoose';
+import category, { Category } from '../models/category';
+import { CallbackError } from 'mongoose';
+import { verifyToken, verifyRole } from '../middlewares/auth';
 
 const app = express();
-1;
 
-app.post('/category', (req: express.Request, res: express.Response) => {
-  const category = new Category({
-    categoryId: req.body.categoryId,
-    name: req.body.name,
-    description: req.body.description,
-  });
-
-  category.save((error: mongoose.Error, category: CategoryType) => {
-    if (error) {
-      return res.status(500).json({
-        ok: false,
-        error,
-      });
-    }
-
-    if (!category) {
-      return res.status(400).json({
-        ok: false,
-        error: {
-          message: 'Category not found',
-        },
-      });
-    }
-
-    return res.json({
-      ok: true,
-      category,
+app.post(
+  '/category',
+  [verifyToken, verifyRole],
+  (req: Request<any, any, Category>, res: express.Response) => {
+    const newCategory = new category({
+      name: req.body.name,
+      description: req.body.description,
     });
-  });
-});
+
+    console.log('asd', newCategory);
+    newCategory.save((error: CallbackError, category: Category) => {
+      console.log(category);
+      if (error) {
+        return res.status(500).json({
+          ok: false,
+          error,
+        });
+      }
+
+      if (!category) {
+        return res.status(400).json({
+          ok: false,
+          error: {
+            message: 'Category not found',
+          },
+        });
+      }
+
+      return res.json({
+        ok: true,
+        category,
+      });
+    });
+  },
+);
 
 export default app;

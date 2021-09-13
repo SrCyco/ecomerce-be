@@ -3,8 +3,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Error } from 'mongoose';
 
-import User from '../models/user';
-import { User as UserType } from '../types/types';
+import account, { Account } from '../models/account';
+import { SECRET_KEY } from '../config/config';
+
 const app = express();
 
 app.post('/login', (req, res) => {
@@ -17,7 +18,7 @@ app.post('/login', (req, res) => {
     },
   };
 
-  User.findOne({ email }, (error: Error, user: UserType) => {
+  account.findOne({ email }, (error: Error, findedAccount: Account) => {
     if (error) {
       return res.status(500).json({
         ok: false,
@@ -25,25 +26,25 @@ app.post('/login', (req, res) => {
       });
     }
 
-    if (!user) {
+    if (!findedAccount) {
       return res.status(400).json(noMatchResponse);
     }
 
-    if (!bcrypt.compareSync(password, user.password)) {
+    if (!bcrypt.compareSync(password, findedAccount.password)) {
       return res.status(400).json(noMatchResponse);
     }
 
     const token = jwt.sign(
       {
-        user,
+        account: findedAccount,
       },
-      'test',
+      SECRET_KEY,
       { expiresIn: '48h' },
     );
 
     res.json({
       ok: true,
-      user,
+      account: findedAccount,
       token,
     });
   });

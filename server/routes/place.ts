@@ -1,27 +1,35 @@
 import express, { Request, Response } from 'express';
-import Place from '../models/place';
+import place, { Place } from '../models/place';
 
-import { Error, Types } from 'mongoose';
-import { Place as PlaceType } from '../types/types';
+import { CallbackError, Error } from 'mongoose';
 
 const app = express();
 
 export const findPlaceById = async (placeId: string): Promise<string> => {
   try {
-    const findedPlace = await Place.findOne({ placeId });
+    const findedPlace = await place.findOne({ placeId });
     console.log(findedPlace);
-    return findedPlace._id;
+    return findedPlace ? findedPlace._id : undefined;
   } catch (error: any) {
     throw new Error(error);
   }
 };
 
-app.post('/place', async (req: Request, res: Response) => {
+app.post('/place', async (req: Request<any, any, Place>, res: Response) => {
   const body = req.body;
-  const { placeId, countryId, departmentId, cityId, type, name } = body;
+  const {
+    countryId,
+    departmentId,
+    cityId,
+    addressId,
+    type,
+    description,
+    additionalInfo,
+  } = body;
   let findedCountryId;
   let findedDepartmentId;
   let findedCityId;
+  let findedAddressId;
 
   try {
     findedCountryId = countryId ? await findPlaceById(countryId) : countryId;
@@ -29,20 +37,22 @@ app.post('/place', async (req: Request, res: Response) => {
       ? await findPlaceById(departmentId)
       : departmentId;
     findedCityId = cityId ? await findPlaceById(cityId) : cityId;
+    findedAddressId = addressId ? await findPlaceById(addressId) : addressId;
   } catch (error: any) {
     throw new Error(error);
   }
 
-  const place = new Place({
-    placeId,
+  const newPlace = new place({
     countryId: findedCountryId,
     departmentId: findedDepartmentId,
     cityId: findedCityId,
+    addressId: findedAddressId,
     type,
-    name,
+    description,
+    additionalInfo,
   });
 
-  place.save((error: Error, savedPlace: PlaceType) => {
+  newPlace.save((error: CallbackError, savedPlace: Place) => {
     if (error) {
       return res.status(500).json({
         ok: false,

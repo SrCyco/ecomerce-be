@@ -15,6 +15,7 @@ export interface Place {
   addressId?: PopulatedDoc<Place & Document>;
   type: PlaceType;
   description: string;
+  additionalInfo?: string;
 }
 
 const placeSchema = new Schema<Place, Model<Place>, Place>({
@@ -40,12 +41,15 @@ const placeSchema = new Schema<Place, Model<Place>, Place>({
   },
   type: {
     type: String,
-    unique: true,
     required: true,
   },
   description: {
     type: String,
     unique: true,
+    required: true,
+  },
+  additionalInfo: {
+    type: String,
     required: false,
   },
 });

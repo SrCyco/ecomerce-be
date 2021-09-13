@@ -1,8 +1,9 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
-import { localDB } from './config/config';
+import { ATLAS_DB } from './config/config';
 import routes from './routes';
+import { createAccounts, accounts } from './boot/seed';
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -14,7 +15,7 @@ app.use(routes);
 
 const dbConnection = async () => {
   try {
-    await mongoose.connect(localDB, {
+    await mongoose.connect(ATLAS_DB, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,
@@ -31,6 +32,8 @@ dbConnection()
   .catch((error) => {
     throw error;
   });
+
+createAccounts(accounts);
 
 app.get('/', (req, res) => {
   res.send('Hello World');
